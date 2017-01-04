@@ -1,4 +1,8 @@
 ### Usage
+- pip install -r requirements.txt
+- Install a font like http://www.dafont.com/kingthings-trypewriter.font
+-  https://stackoverflow.com/questions/24696433/why-font-list-is-empty-for-imagemagick to install font
+- run
 `python typewriter.py <name of poem text file>`
 
 - Installed ImageMagick from homebrew
