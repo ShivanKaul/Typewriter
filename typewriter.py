@@ -13,6 +13,7 @@ def generate_image(input_file, output_file,
                    height=700, width=700,
                    blur=False,
                    author_name="",
+                   border=True, bordercolor="black", bordersize=2,
                    font_name="KingthingsTrypewriter2", font_size=24):
     # Append author name to piece
     # Another style = '\n\n-'
@@ -20,8 +21,17 @@ def generate_image(input_file, output_file,
     by_line = accr_style + author_name + '"' if author_name is not "" else '"'
     text = 'echo "$(cat ' + input_file + ')' + by_line
 
+    # Apply effects
+    all_effects = [(blur,
+                    " -blur 1x1 "),
+                   (border,
+                    " -border " + str(bordersize) +
+                    " -bordercolor " + bordercolor + " ")]
+    effects = reduce(
+        lambda effects, (effect, effectString):
+        effects + effectString
+        if effect else effects, all_effects, "")
     # Do image magic
-    effects = " -blur 1x1 " if blur else ""
     dimensions = str(height) + 'x' + str(width)
     imageMagick = ('convert -size ' + dimensions + ' -font ' + font_name +
                    ' -pointsize ' + str(font_size) +
