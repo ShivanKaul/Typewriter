@@ -1,39 +1,53 @@
 import sys
 import os
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import random
-import scipy.ndimage.filters
-import scipy.misc
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import matplotlib.image as mpimg
+# import random
+# import scipy.ndimage.filters
+# import scipy.misc
+# import scipy.signal
 
 
 def generate_image(input_file, output_file,
                    height=700, width=700,
                    blur=False,
-                   poet_name="bug",
+                   author_name="",
                    font_name="KingthingsTrypewriter2", font_size=24):
-    # Append poet name to poem
-    poem = 'echo "$(cat ' + input_file + ')\n\n...\n\n-' + poet_name + '"'
-    effects = " -blur 1x1 " if blur else ""
+    # Append author name to piece
+    # Another style = '\n\n-'
+    accr_style = '\n\n...\n\n'
+    by_line = accr_style + author_name + '"' if author_name is not "" else '"'
+    text = 'echo "$(cat ' + input_file + ')' + by_line
+
     # Do image magic
+    effects = " -blur 1x1 " if blur else ""
     dimensions = str(height) + 'x' + str(width)
     imageMagick = ('convert -size ' + dimensions + ' -font ' + font_name +
                    ' -pointsize ' + str(font_size) +
                    effects +
                    ' -gravity center label:@- ' +
                    output_file)
-    cmd = poem + " | " + imageMagick
+    cmd = text + " | " + imageMagick
     os.system(cmd)
 
 
-def make_vignette(input_file, output_file):
-    cmd = "convert " + input_file + " -background black -vignette 50x50  " + output_file
-    os.system(cmd)
+def batch_process(input_folder, output_folder, author):
+    # For each file in input_folder, make image in output_folder
+    for root, dirnames, filenames in os.walk(input_folder):
+            for filename in filenames:
+                input_file = input_folder + filename
+                output_file = output_folder + 'typewriter_' + filename + '.gif'
+                generate_image(input_file, output_file, author_name=author)
 
 
-def create_typewriter_effect(img):
-    # Post processing
+def make_vignette(img, output_file):
+    vignette = scipy.signal.convolve2d(
+        np.ones(img.shape), generate_gaussian(10, 100), mode="same")
+    mpimg.imsave(output_file, img*vignette, cmap=plt.get_cmap('gray'))
+
+
+def make_smudge(img, output_file):
     gradient = np.gradient(img)
     print(gradient)
     new_img = np.zeros(img.shape)
@@ -52,7 +66,7 @@ def create_typewriter_effect(img):
 
     new_img = scipy.ndimage.filters.convolve(
         new_img, generate_gaussian(0.7, 4), mode='nearest')
-    mpimg.imsave("result.jpg", new_img, cmap=plt.get_cmap('gray'))
+    mpimg.imsave(output_file, new_img, cmap=plt.get_cmap('gray'))
 
 
 def generate_gaussian(sigma, N):
@@ -68,13 +82,19 @@ def generate_gaussian(sigma, N):
     g = np.divide(g, np.sum(g))
     return g
 
-if len(sys.argv) < 2:
-    print("Please provide path to poem text")
+
+if len(sys.argv) < 3:
+    print("Format: python typewriter.py input_path output_path author")
     sys.exit()
-input_file = sys.argv[1]
-output_file = "poem_" + input_file + ".gif"
-generate_image(input_file, output_file)
-# make_vignette(output_file, output_file)
+
+input_path, output_path = sys.argv[1], sys.argv[2]
+author_name = ""
+if len(sys.argv) == 4:
+    author_name = sys.argv[3]
+
+batch_process(input_path, output_path, author_name)
+
 # Post processing
 # img = scipy.misc.imread(output_file) / 255
-# create_typewriter_effect(img)
+# make_vignette(img, output_file)
+# make_smudge(img, output_file)
