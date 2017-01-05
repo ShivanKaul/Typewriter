@@ -10,14 +10,17 @@ import scipy.misc
 
 def generate_image(input_file, output_file,
                    height=700, width=700,
+                   blur=False,
                    poet_name="bug",
                    font_name="KingthingsTrypewriter2", font_size=24):
     # Append poet name to poem
     poem = 'echo "$(cat ' + input_file + ')\n\n...\n\n-' + poet_name + '"'
+    effects = " -blur 1x1 " if blur else ""
     # Do image magic
     dimensions = str(height) + 'x' + str(width)
     imageMagick = ('convert -size ' + dimensions + ' -font ' + font_name +
                    ' -pointsize ' + str(font_size) +
+                   effects +
                    ' -gravity center label:@- ' +
                    output_file)
     cmd = poem + " | " + imageMagick
