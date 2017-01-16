@@ -1,6 +1,6 @@
 # Typewriter
 
-Generate pretty images of text, thusly:
+Generate pretty images of text, useful for writing on Instagram. For the following input:
 
 ```
 Magic is dead.
@@ -16,7 +16,7 @@ is just my brain snorting
 information.
 ```
 
-generates:
+the script generates:
 
 ![Magic](/generated_images/typewriter_magic.gif?raw=true "Poem, Magic") 
 
