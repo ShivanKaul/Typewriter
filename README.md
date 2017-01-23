@@ -5,8 +5,7 @@ Generate pretty images of text, useful for writing on Instagram. For the followi
 ```
 Magic is dead.
 
-But sometimes 
-it lives like a refugee, in
+It lives like a refugee, in
 the spaces between your fingers:
 
 for times when you forget
