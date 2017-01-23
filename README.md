@@ -5,7 +5,8 @@ Generate pretty images of text, useful for writing on Instagram. For the followi
 ```
 Magic is dead.
 
-It lives like a refugee, in
+But sometimes 
+it lives like a refugee, in
 the spaces between your fingers:
 
 for times when you forget
@@ -30,9 +31,15 @@ Apart from that, if not doing any fancy stuff like Gaussian blurring or smudging
 
 ### Usage
 
-`$ python typewriter.py input_path output_path author_name`
+For single text, use:
+`$ python typewriter.py input_file output_file [author_name]`
 
-The script assumes that all the text files are in the folder specified in input_path, and then it generates the image with the name "typewriter_original-filename" in folder specified by output_path. The main work is done by the `generate_image()` function in the `typewriter.py` script. Modify that if things don't work / don't work for you.
+The `output_file` must have a `.gif` name.
+
+For batch processing multiple text files, use:
+`$ python batch_process.py input_path output_path [author_name]`
+
+The batch_process script assumes that all the text files are in the folder specified in input_path, and then it generates the image with the name "typewriter_original-filename" in folder specified by output_path. The main work is done by the `generate_image()` function in the `typewriter.py` script. Modify that if things don't work / don't work for you.
 
 Author name is optional parameter. Different accreditation styles can be tweaked in `generate_image()`.
 
