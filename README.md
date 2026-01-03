@@ -41,8 +41,3 @@ For batch processing multiple text files, use:
 The batch_process script assumes that all the text files are in the folder specified in input_path, and then it generates the image with the name "typewriter_original-filename" in folder specified by output_path. The main work is done by the `generate_image()` function in the `typewriter.py` script. Modify that if things don't work / don't work for you.
 
 Author name is optional parameter. Different accreditation styles can be tweaked in `generate_image()`.
-
-### Credits
-
-Worked on by Sneha Sankavaram and Shivan Kaul Sahib. 
- 
